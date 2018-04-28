@@ -16,10 +16,10 @@ function returnFirstArgument(param) {
     return param;
 }
 
-window.console.log(returnFirstArgument(12));
-window.console.log(returnFirstArgument('fer'));
-window.console.log(returnFirstArgument([1, 'df', 4]));
-window.console.log(returnFirstArgument({ 1: 23, 'df': 'dfd', 4: 45 }));
+console.log(returnFirstArgument(12));
+console.log(returnFirstArgument('fer'));
+console.log(returnFirstArgument([1, 'df', 4]));
+console.log(returnFirstArgument({ 1: 23, 'df': 'dfd', 4: 45 }));
 /*
  Задание 2:
 
@@ -38,9 +38,9 @@ function sumWithDefaults(a, b = 100) {
     return a + b;
 }
 
-window.console.log(sumWithDefaults(10, 20));
-window.console.log(sumWithDefaults(2, 4));
-window.console.log(sumWithDefaults(10));
+console.log(sumWithDefaults(10, 20));
+console.log(sumWithDefaults(2, 4));
+console.log(sumWithDefaults(10));
 
 /*
  Задание 3:
@@ -54,7 +54,7 @@ function returnFnResult(fn) {
     return fn();
 }
 
-window.console.log(returnFnResult(() => 'привет'));
+console.log(returnFnResult(() => 'привет'));
 
 /*
  Задание 4:
@@ -72,14 +72,12 @@ window.console.log(returnFnResult(() => 'привет'));
 
 var f = returnCounter(10);
 
-window.console.log(f()); // выведет 11
-window.console.log(f()); // выведет 12
-window.console.log(f()); // выведет 13
+console.log(f()); // выведет 11
+console.log(f()); // выведет 12
+console.log(f()); // выведет 13
 
 function returnCounter(number = 0) {
-    return function F() {
-        return ++number;
-    };
+    return () => ++number;
 }
 
 /*
@@ -92,10 +90,10 @@ function returnCounter(number = 0) {
    returnArgumentsArray(1, 2, 3) вернет [1, 2, 3]
    */
 function returnArgumentsArray() {
-    return Array.prototype.slice.call(arguments);
+    return [...arguments];
 }
 
-window.console.log(returnArgumentsArray(1, 2, 3));
+console.log(returnArgumentsArray(1, 2, 3));
 
 /*
  Задание 6 *:
@@ -118,12 +116,12 @@ function sum(a, b) {
 
 var newSum = bindFunction(sum, 2, 7);
 
-window.console.log(newSum());
+console.log(newSum());
 
 function bindFunction(fn, ...valuesArr) {
-    return function bind() {
+    return function() {
         return fn.apply(null, valuesArr);
-    }; 
+    };
 }
 
 export {

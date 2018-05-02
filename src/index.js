@@ -7,7 +7,7 @@
  Посмотрите как работает forEach и повторите это поведение для массива, который будет передан в параметре array
  */
 function forEach(array, fn) {
-    for (let i = 0, arLength = array.length; i < arLength; i++) {
+    for (let i = 0; i < array.length; i++) {
         fn(array[i], i, array);
     }
 }
@@ -21,13 +21,13 @@ console.log(forEach([1, 2, 4], (...args) => console.log(args[0])));
  Посмотрите как работает map и повторите это поведение для массива, который будет передан в параметре array
  */
 function map(array, fn) {
-    let array2 = [];
+    const resultArr = [];
 
-    for (let i = 0, arLength = array.length; i < arLength; i++) {
-        array2.push(fn(array[i], i, array));
+    for (let i = 0; i < array.length; i++) {
+        resultArr.push(fn(array[i], i, array));
     }
 
-    return array2;
+    return resultArr;
 }
 
 console.log(map(['HTML', 'CSS', 'JavaScript'], (...args) => args[0].length));
@@ -43,7 +43,7 @@ function reduce(array, fn, initial) {
 
     let i = (initial !== undefined) ? 0 : 1;
 
-    for (let arLength = array.length; i < arLength; i++) {
+    for (; i < array.length; i++) {
         prev = fn(prev, array[i], i, array);
     }
 
@@ -72,7 +72,16 @@ console.log( upperProps({ name: 'Сергей', lastName: 'Петров' }) );
  Напишите аналог встроенного метода slice для работы с массивами
  Посмотрите как работает slice и повторите это поведение для массива, который будет передан в параметре array
  */
+
+let isNumericOrUndef = n => 
+    n == undefined || (typeof n == 'number' && !isNaN(n) && isFinite(n));
+
 function slice(array, from, to) {
+    if (!isNumericOrUndef(from) || !isNumericOrUndef(to)) {
+        console.log('Введено не число');
+
+        return;
+    }
     if (from < 0) {
         from += array.length;
     }
@@ -81,14 +90,8 @@ function slice(array, from, to) {
     }
     let resultArr = [];
 
-    for (let i = 0, arLength = array.length; i < arLength; i++) {
-        if (from == undefined && to == undefined) {
-            resultArr.push(array[i]);
-        }
-        if (i >= from && to == undefined) {
-            resultArr.push(array[i]);
-        }
-        if (i >= from && i < to) {
+    for (let i = 0; i < array.length; i++) {
+        if ((from == undefined || i >= from) && (to == undefined || i < to)) {
             resultArr.push(array[i]);
         }
     }
@@ -100,6 +103,7 @@ console.log(slice([0, 'a', 'b', 2, 4, 'word'], 2, 4));
 console.log(slice([0, 'a', 'b', 2, 4, 'word']));
 console.log(slice([0, 'a', 'b', 2, 4, 'word'], 4));
 console.log(slice([0, 'a', 'b', 2, 4, 'word'], -4, 5));
+console.log(slice([0, 'a', 'b', 2, 4, 'word'], 'fdh', 5));
 
 /*
  Задание 6 *:

@@ -93,7 +93,6 @@ try {
  3.3: Необходимо выбрасывать исключение в случаях:
    - fn не является функцией (с текстом "fn is not a function")
  */
-let exepArr = [];
 
 function returnBadArguments(fn, ...rest) {
     if (typeof fn != 'function') {
@@ -103,29 +102,28 @@ function returnBadArguments(fn, ...rest) {
     if (rest.length == 0) {
         return [];
     }
-    
-    try {
-        for (const elem of rest) {
-            console.log(fn(elem));
-        }
-    } catch (e) {
-        console.log(e.message);
-    } 
+    let exepArr = [];
+
+    for (const elem of rest) {
+        try {
+            fn(elem);
+        } catch (e) {
+            exepArr.push(elem);
+            console.log(e.message);
+        } 
+    }
     
     return exepArr;
 }
 
 let checkEven = n => {
     if (n % 2 != 0) {
-        exepArr.push(n);
         throw new Error('not even');
     }
-
-    return n / 2;
 }
 
 try {
-    console.log(returnBadArguments(checkEven, 4, 8, 3, 1));
+    console.log(returnBadArguments(checkEven, 7, 4, 8, 3, 1));
 } catch (e) {
     console.log(e.message);
 } 
@@ -148,7 +146,7 @@ try {
    - какой-либо из аргументов div является нулем (с текстом "division by 0")
  */
 function calculator(number = 0) {
-    if (typeof number == 'string' || isNaN(parseFloat(number)) || !isFinite(number)) {
+    if (typeof number != 'number' && !isFinite(number)) {
         throw new Error('number is not a number');
     }
 

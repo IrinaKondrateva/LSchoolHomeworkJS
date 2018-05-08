@@ -17,7 +17,7 @@
    isAllTrue([100, 2, 3, 4, 5], n => n < 10) // вернет false
  */
 function isAllTrue(array, fn) {
-    if (array.length == 0 || !Array.isArray(array)) {
+    if (!array.length || !Array.isArray(array)) {
         throw new Error('empty array');
     }
     if (typeof fn != 'function') {
@@ -27,7 +27,7 @@ function isAllTrue(array, fn) {
     let result = true;
 
     for (const elem of array) {
-        if (fn(elem) != true) {
+        if (fn(elem) !== true) {
             result = false;
         }
     }
@@ -58,7 +58,7 @@ try {
    isSomeTrue([1, 2, 3, 4, 5], n => n > 20) // вернет false
  */
 function isSomeTrue(array, fn) {
-    if (array.length == 0 || !Array.isArray(array)) {
+    if (!array.length || !Array.isArray(array)) {
         throw new Error('empty array');
     }
     if (typeof fn != 'function') {
@@ -68,7 +68,7 @@ function isSomeTrue(array, fn) {
     let result = false;
 
     for (const elem of array) {
-        if (fn(elem) == true) {
+        if (fn(elem) === true) {
             result = true;
         }
     }
@@ -98,10 +98,7 @@ function returnBadArguments(fn, ...rest) {
     if (typeof fn != 'function') {
         throw new Error('fn is not a function');
     }
-
-    if (rest.length == 0) {
-        return [];
-    }
+    
     let exepArr = [];
 
     for (const elem of rest) {

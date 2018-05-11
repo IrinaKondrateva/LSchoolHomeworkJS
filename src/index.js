@@ -170,38 +170,59 @@ function deleteTextNodesRecursive(where) {
    }
  */
 function collectDOMStat(root) {
-    const rootDivs = root.getElementsByTagName('div');
-    const rootB = root.getElementsByTagName('b');
-    const rootClass1 = root.querySelectorAll('.some-class-1');
-    const rootClass2 = root.querySelectorAll('.some-class-2');
-
     let textCounter = 0;
-    
-    let findTxtNode = function (elem) {
-        const rootNodes = elem.childNodes;
+    let countTxtNode;
+
+    // count TextNode in root
+
+    (countTxtNode = elem => {
+        const elemNodes = elem.childNodes;
         
-        for (const node of rootNodes) {
+        for (const node of elemNodes) {
             if (node.nodeType == 3) {
                 textCounter++;
             }
             if (node.hasChildNodes()) {
-                findTxtNode(node);
+                countTxtNode(node);
             }
         }
-    }(root);
+    })(root);
+    
+    // count classes in root
+
+    const classCounter = {},
+        rootElems = root.getElementsByTagName('*');
+
+    (elems => {        
+        for (const elem of elems) {
+            if (elem.classList.length) {
+                for (const cssClass of elem.classList) {
+                    classCounter[cssClass] = ([cssClass] in classCounter) ? 
+                        classCounter[cssClass] + 1 : 1;
+                }
+            }
+        }
+    })(rootElems);
+
+    // count tags in root
+    
+    const tagsCounter = {};
+
+    (elems => {        
+        for (const elem of elems) {
+            tagsCounter[elem.tagName] = ([elem.tagName] in tagsCounter) ? 
+                tagsCounter[elem.tagName] + 1 : 1;
+        }
+    })(rootElems);
 
     return {
-        tags: {
-            DIV: rootDivs.length,
-            B: rootB.length
-        },
-        classes: {
-            ['some-class-1']: rootClass1.length,
-            ['some-class-2']: rootClass2.length
-        },
+        tags: tagsCounter,
+        classes: classCounter,
         texts: textCounter
     };
 }
+
+console.log(collectDOMStat(document.body));
 
 /*
  Задание 8 *:
@@ -237,22 +258,13 @@ function collectDOMStat(root) {
  */
 function observeChildNodes(where, fn) {
     let observer = new MutationObserver(function(mutations) {
-        console.log(mutations);
         mutations.forEach(function(mutation) {
-            let tagName = [];
-
             if (mutation.addedNodes.length) {
-                for (const nodeAdded of mutation.addedNodes) {
-                    tagName.push(nodeAdded.tagName);
-                }
-                fn({ type: 'insert', nodes: tagName })
+                fn({ type: 'insert', nodes: [...mutation.addedNodes] })
             }
 
             if (mutation.removedNodes.length) {
-                for (const nodeRemoved of mutation.removedNodes) {
-                    tagName.push(nodeRemoved.tagName);
-                }
-                fn({ type: 'remove', nodes: tagName })
+                fn({ type: 'remove', nodes: [...mutation.removedNodes] })
             }
         });    
     });

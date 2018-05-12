@@ -48,9 +48,7 @@ function skipDefault(eventName, target) {
    emulateClick(document.querySelector('a')) // для указанного элемента должно быть сэмулировано события click
  */
 function emulateClick(target) {
-    var event = new CustomEvent('click');
-
-    target.dispatchEvent(event);
+    target.dispatchEvent(new CustomEvent('click'));
 }
 
 /*
@@ -64,10 +62,10 @@ function emulateClick(target) {
    который будет вызывать указанную функцию только если кликнули на кнопку (элемент с тегом button)
  */
 function delegate(target, fn) {
-    target.addEventListener('click', function(e) {
+    target.addEventListener('click', e => {
         let eventTarget = e.target;
 
-        while (eventTarget !== this) {
+        while (eventTarget !== target) {
             if (eventTarget.tagName === 'BUTTON') {
                 fn();
 

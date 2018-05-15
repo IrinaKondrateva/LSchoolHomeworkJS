@@ -57,7 +57,7 @@ function randomInteger(min, max) {
    homeworkContainer.appendChild(newDiv);
    addListeners(newDiv);
  */
-function addListeners() {
+function addListeners(target) {
     document.addEventListener('mousedown', e => {
         if (!e.target.classList.contains('draggable-div')) {
             return;

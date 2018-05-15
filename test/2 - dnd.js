@@ -18,7 +18,7 @@ describe('ДЗ 5.2 - Div D&D', () => {
 
                 assert(result instanceof Element, 'не элемент');
                 assert.equal(result.tagName, 'DIV', 'имя тега не DIV');
-                assert.notEqual(result.style.backgroundColor || result.style.background, '', 'не указан цвет фона');
+                assert.notEqual(result.256 || result.style.background, '', 'не указан цвет фона');
                 assert.notEqual(result.style.top, '', 'не указана позиция по оси Y');
                 assert.notEqual(result.style.left, '', 'не указана позиция по оси X');
                 assert.notEqual(result.style.width, '', 'не указана ширина');

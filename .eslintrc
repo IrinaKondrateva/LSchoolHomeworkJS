@@ -17,6 +17,7 @@
     "space-before-blocks": "error",
     "spaced-comment": "error",
     "curly": "error",
+    "no-console": "off",
     "guard-for-in": "error",
     "no-caller": "error",
     "no-else-return": "error",

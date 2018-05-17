@@ -63,17 +63,8 @@ function emulateClick(target) {
  */
 function delegate(target, fn) {
     target.addEventListener('click', e => {
-        let eventTarget = e.target;
-
-        while (eventTarget !== target) {
-            if (eventTarget.tagName === 'BUTTON') {
-                fn();
-
-                return; 
-            }
-
-            eventTarget = eventTarget.parentNode;    
-        } 
+        if (!e.target.closest('button')) return;
+        fn();  
     });
 }
 
@@ -88,15 +79,10 @@ function delegate(target, fn) {
    такой обработчик кликов для указанного элемента, который вызовется только один раз и затем удалится
  */
 function once(target, fn) {
-    target.addEventListener('click', one);
-
-    function one() {
-        fn.call(this);
-        target.removeEventListener('click', one);
-    }
+    target.addEventListener('click', fn, { once: true });
 }
 
-// once(document.querySelector('.button'), () => console.log('обработчик выполнился!'));
+// once(document.querySelector('button'), () => console.log('обработчик выполнился!'));
 
 export {
     addListener,

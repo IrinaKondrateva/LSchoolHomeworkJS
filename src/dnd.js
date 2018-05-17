@@ -31,13 +31,15 @@ function createDiv() {
     const newDiv = document.createElement('div');
 
     newDiv.classList.add('draggable-div');
-    newDiv.style.backgroundColor = '#' + ('00000' + (Math.random() * 16777216 << 0).toString(16)).substr(-6);
-    newDiv.style.width = randomInteger(10, 150) + 'px';
-    newDiv.style.height = randomInteger(10, 150) + 'px';
-    newDiv.style.position = 'absolute';
-    newDiv.style.top = randomInteger(0, 400) + 'px';
-    newDiv.style.left = randomInteger(0, 400) + 'px';
-
+    newDiv.style.cssText = `
+        background-color: #${('00000' + (Math.random() * 16777216 << 0).toString(16)).substr(-6)};
+        width: ${randomInteger(10, 150)}px;
+        height: ${randomInteger(10, 150)}px;
+        position: absolute;
+        top: ${randomInteger(0, window.innerHeight)}px;
+        left: ${randomInteger(0, window.innerWidth)}px;
+    `;
+    
     return newDiv;
 }
 

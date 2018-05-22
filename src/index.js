@@ -56,18 +56,25 @@ loadAndSortTowns().then(towns => console.log(towns), err => console.log(err));
 // реализация через fetch:
 
 function loadAndSortTowns() {
-    let compareTowns = (a, b) => 
-        (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1;
-
     return fetch('https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json')
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Не удалось загрузить города');
+            }
+
+            return response.json();
+        })
         .then(towns => towns.sort(compareTowns))
-        .catch(() => {
-            throw new Error('Не удалось загрузить города')
+        .catch(e => {
+            console.warn(e.message);
         })
 }
 
-loadAndSortTowns().then(towns => console.log(towns), err => console.log(err.message));
+function compareTowns(a, b) { 
+    return a.name.toLowerCase() > b.name.toLowerCase() ? 1 : a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 0;
+}
+
+loadAndSortTowns().then(towns => console.log(towns));
 
 export {
     delayPromise,

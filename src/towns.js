@@ -36,6 +36,10 @@ const homeworkContainer = document.querySelector('#homework-container');
  Массив городов пожно получить отправив асинхронный запрос по адресу
  https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json
  */
+let townsArr;
+
+loadTowns();
+
 function loadTowns() {
     return new Promise( (resolve, reject) => {
         const xhr = new XMLHttpRequest();
@@ -47,29 +51,66 @@ function loadTowns() {
             (xhr.status >= 400) ? reject() : resolve(xhr.response.sort(compareTowns));
         });
         xhr.addEventListener('error', () => reject(new Error('Не удалось загрузить города')));
+    })
+        .then((towns) => {
+            loadingBlock.style.display = 'none';
+            filterBlock.style.display = 'block';
 
-        let compareTowns = (a, b) => 
-            (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1;
-    });
+            return townsArr = towns;
+        })  
+        .catch(e => {
+            console.log(e);
+            loadingBlock.textContent = e.message;
+            let loadBtn = document.createElement('button');
+            
+            loadBtn.textContent = 'Загрузить повторно';
+            loadBtn.addEventListener('click', () => {
+                loadingBlock.textContent = 'Загрузка...';
+                loadBtn.remove();
+                loadTowns();
+            });
+
+            homeworkContainer.insertBefore(loadBtn, loadingBlock.nextElementSibling);
+        });
 }
 
-let townsArr;
+// реализация с fetch!!!:
+/*
+function loadTowns() {
+    return fetch('https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Не удалось загрузить города');
+            }
 
-loadTowns()
-    .then((towns) => {
-        loadingBlock.style.display = 'none';
-        filterBlock.style.display = 'block';
-        townsArr = towns;
-    })
-    .catch(e => {
-        loadingBlock.textContent = e.message;
-        let loadBtn = document.createElement('button');
-        
-        loadBtn.textContent = 'Загрузить повторно';
-        loadBtn.addEventListener('click', loadTowns);
+            return response.json();
+        })
+        .then((towns) => {
+            loadingBlock.style.display = 'none';
+            filterBlock.style.display = 'block';
 
-        homeworkContainer.insertBefore(loadBtn, loadingBlock.nextElementSibling);
-    });
+            return townsArr = towns.sort(compareTowns);
+        })  
+        .catch(e => {
+            console.log(e);
+            loadingBlock.textContent = 'Не удалось загрузить города';
+            let loadBtn = document.createElement('button');
+            
+            loadBtn.textContent = 'Загрузить повторно';
+            loadBtn.addEventListener('click', () => {
+                loadingBlock.textContent = 'Загрузка...';
+                loadBtn.remove();
+                loadTowns();
+            });
+
+            homeworkContainer.insertBefore(loadBtn, loadingBlock.nextElementSibling);
+        });
+}
+*/
+
+function compareTowns(a, b) { 
+    return a.name.toLowerCase() > b.name.toLowerCase() ? 1 : a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 0;
+}
 
 /*
  Функция должна проверять встречается ли подстрока chunk в строке full
